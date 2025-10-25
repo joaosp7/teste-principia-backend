@@ -1,6 +1,6 @@
 Todo MVP Project
 
-[] postgres using docker compose
+[x] postgres using docker compose
 [] ORM integration (TypeORM)
 [] migrations
 [] class-validator
