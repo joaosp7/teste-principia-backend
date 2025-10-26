@@ -24,7 +24,7 @@ Routes
 
 
 Nice to have (not obrigatory and if I have time)
-[] Health check
+[x] Health check (db healthcheck)
 [] Data Serialization
 [x] Guards (api-key/ authorization)
 [] JWT Token (login/ authentication)
