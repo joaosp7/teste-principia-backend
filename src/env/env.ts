@@ -12,6 +12,7 @@ const envSchema = z.object({
   POSTGRES_USER: z.string().optional().default('postgres'),
   POSTGRES_PASSWORD: z.string(),
   PORT: z.string().transform(Number).default(3000),
+  APP_SECRET: z.string(),
 
 })
 

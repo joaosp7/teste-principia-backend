@@ -30,6 +30,9 @@ export default tseslint.config(
       'semi': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-floating-promises': 'off',//for dev purposes
+      '@typescript-eslint/no-unsafe-assignment': 'off', //for dev purposes
+      '@typescript-eslint/no-unused-vars': 'off', //for dev purposes
+      '@typescript-eslint/no-unsafe-member-access': 'off', //for dev purposes
       '@typescript-eslint/no-unsafe-argument': 'off', //for dev purposes
       'prettier/prettier': ['off', { singleQuote: true, semi: true }],
     },

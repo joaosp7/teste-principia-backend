@@ -1,18 +1,18 @@
 Todo MVP Project
 
 [x] postgres using docker compose
-[] ORM integration (TypeORM)
-[] migrations
-[] class-validator
+[x] ORM integration (TypeORM)
+[x] migrations
+[x] class-validator
 [] pagination on API
 [] search on API
-[] Swagger
+[x] Swagger
 [] Nice Error Handling and correct status code
 [] Unitary tests 
 [] Readme explanations
 [] Seeds (optional)
 [] Structured logs (optional)
-[] Aditional filters by multiple columns
+[] Aditional filters by multiple columns (optinal)
 
 Routes 
   [] GET /items 
@@ -26,12 +26,12 @@ Routes
 Nice to have (not obrigatory and if I have time)
 [] Health check
 [] Data Serialization
-[] Guards
-[] JWT Token
+[x] Guards (api-key/ authorization)
+[] JWT Token (login/ authentication)
 [] Postman configuration
 [] E2E tests
 [] Router Module?
 [] Soft delete?
 [] Interceptors for common response?
 [] Deploy?
-[] CI/CD
+[] CI/CD?
