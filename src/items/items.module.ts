@@ -2,11 +2,13 @@ import { Module } from '@nestjs/common';
 import { ItemsController } from './controllers/items.controller';
 import { ItemsService } from './services/items.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ItemsRepositoryImpl } from './repository/implementations/postgresRepository';
+import { Item } from './entities/item.entity';
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature()],
+  imports: [TypeOrmModule.forFeature([Item])],
   controllers: [ItemsController],
-  providers: [ItemsService],
+  providers: [ItemsService, ItemsRepositoryImpl],
 })
 export class ItemsModule {}

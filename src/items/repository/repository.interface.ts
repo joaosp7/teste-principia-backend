@@ -6,11 +6,11 @@ export interface ItemsRepository {
 
    create(itemDto: CreateItemDto): Promise<Item>
 
-   update(updateDto: UpdateItemDto): Promise<Item>
+   update(updateDto: UpdateItemDto, id:string): Promise<Item|null>
 
-   getAll(): Promise<Item[]>
+   getAll( filters: any): Promise<any>
 
-   getById(id:string): Promise<Item>
+   getById(id:string): Promise<Item | null>
 
    deleteById(id: string): Promise<null>
 

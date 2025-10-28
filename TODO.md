@@ -4,23 +4,23 @@ Todo MVP Project
 [x] ORM integration (TypeORM)
 [x] migrations
 [x] class-validator
-[] pagination on API
-[] search on API
+[x] pagination on API
+[x] search on API
 [x] Swagger
 [] Nice Error Handling and correct status code
-[] Unitary tests 
-[] Readme explanations
+[x] Unitary tests 
+[x] Readme explanations
 [] Seeds (optional)
 [] Structured logs (optional)
-[] Aditional filters by multiple columns (optinal)
+[x] Aditional filters by multiple columns (optinal)
 
 Routes 
-  [] GET /items 
-        [] query parameters for route (search, page, limit, sort, order)
-  [] GET /items/:id
-  [] POST /items 
-  [] PATCH /items/:id
-  [] DELETE /items/:id
+  [x] GET /items 
+        [x] query parameters for route (search, page, limit, sort, order)
+  [x] GET /items/:id
+  [x] POST /items 
+  [x] PATCH /items/:id
+  [x] DELETE /items/:id
 
 
 Nice to have (not obrigatory and if I have time)

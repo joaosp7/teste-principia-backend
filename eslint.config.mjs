@@ -34,7 +34,15 @@ export default tseslint.config(
       '@typescript-eslint/no-unused-vars': 'off', //for dev purposes
       '@typescript-eslint/no-unsafe-member-access': 'off', //for dev purposes
       '@typescript-eslint/no-unsafe-argument': 'off', //for dev purposes
+      '@typescript-eslint/no-unsafe-return': 'off', //for dev purposes
+      '@typescript-eslint/no-unsafe-call': 'off', //for dev purposes
       'prettier/prettier': ['off', { singleQuote: true, semi: true }],
     },
   },
+  {
+    files: ['**/.spec.ts', '**/*.e2e-spec.ts'],
+    rules: {
+      'no-invalid-this': 'off'
+    }
+  }
 );
