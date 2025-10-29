@@ -5,6 +5,7 @@ import { CreateItemDto } from '../dto/create-item.dto';
 import { UpdateItemDto } from '../dto/update-item.dto';
 import { Item } from '../entities/item.entity';
 import { ParamItemGetRouteDto } from '../dto/param-item-get-route.dto';
+import { NotFoundException } from '@nestjs/common';
 
 describe('ItemsService', () => {
   let service: ItemsService;
@@ -145,19 +146,18 @@ describe('ItemsService', () => {
       expect(result).toEqual(item);
     });
 
-    it('should return null for Item not found', async () => {
+    it('should throw NotFoundException for Item not found', async () => {
       const id = 'uuid-2';
+
       repoMock.getById.mockResolvedValue(null);
 
-      const result = await service.findOneItem(id);
-
+      await expect(service.findOneItem(id)).rejects.toThrow(NotFoundException)
       expect(repoMock.getById).toHaveBeenCalledWith(id);
-      expect(result).toBeNull();
     });
 
     it('should propagate repository error', async () => {
       const id = 'uuid-3';
-      const error = new Error('find error');
+      const error = new Error('db-error');
       repoMock.getById.mockRejectedValue(error);
 
       await expect(service.findOneItem(id)).rejects.toThrow(error);
@@ -165,16 +165,14 @@ describe('ItemsService', () => {
   });
 
   describe('updateItem', () => {
-    it('should return null when item does not exist', async () => {
+    it('should throw NotFoundException when item does not exist', async () => {
       const id = 'uuid-1';
       const dto: UpdateItemDto = { description: 'new description' };
       repoMock.getById.mockResolvedValue(null);
 
-      const result = await service.updateItem(id, dto);
-
+      await expect(service.updateItem(id, dto)).rejects.toThrow(NotFoundException);
       expect(repoMock.getById).toHaveBeenCalledWith(id);
       expect(repoMock.update).not.toHaveBeenCalled();
-      expect(result).toBeNull();
     });
 
     it('should correctly update and return the item', async () => {
@@ -207,30 +205,16 @@ describe('ItemsService', () => {
       expect(repoMock.update).toHaveBeenCalledWith(dto, id);
     });
 
-    it('should return null when repository returns null', async () => {
-      const id = 'uuid-4';
-      const dto: UpdateItemDto = { description: 'nova' };
-      const existing: Item = { id, name: 'X' } as Item;
-
-      repoMock.getById.mockResolvedValue(existing);
-      repoMock.update.mockResolvedValue(null);
-
-      const result = await service.updateItem(id, dto);
-
-      expect(result).toBeNull();
-    });
   });
 
   describe('removeItem', () => {
-    it('should return null and not call delete when item does not exist', async () => {
+    it('should throw error and not call delete when item does not exist', async () => {
       const id = 'uuid-1';
       repoMock.getById.mockResolvedValue(null);
 
-      const result = await service.removeItem(id);
-
+      await expect(service.removeItem(id)).rejects.toThrow(NotFoundException);
       expect(repoMock.getById).toHaveBeenCalledWith(id);
       expect(repoMock.deleteById).not.toHaveBeenCalled();
-      expect(result).toBeNull();
     });
 
     it('should correctly delete item', async () => {

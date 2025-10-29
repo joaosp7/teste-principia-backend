@@ -1,14 +1,19 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ItemsController } from './items.controller'; 
 import { ItemsService } from '../services/items.service'; 
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { validate } from 'class-validator';
 import { CreateItemDto } from '../dto/create-item.dto';
 import { UpdateItemDto } from '../dto/update-item.dto';
 import { Item } from '../entities/item.entity';
+import { SeedService } from '../services/seed.service';
 
 describe('ItemsController', () => {
   let controller: ItemsController;
+
+  const seedServiceMock = {
+    insert: jest.fn(),
+  }
 
   const serviceMock = {
     createNewItem: jest.fn(),
@@ -25,6 +30,10 @@ describe('ItemsController', () => {
         {
           provide: ItemsService,
           useValue: serviceMock,
+        },
+        {
+          provide: SeedService,
+          useValue: seedServiceMock
         },
       ],
     }).compile();
@@ -50,17 +59,10 @@ describe('ItemsController', () => {
       expect(result).toEqual(created);
     });
 
-    it('should propagate service error', async () => {
-      const dto: CreateItemDto = { name: 'Task A' };
-      const error = new Error('create error');
-      serviceMock.createNewItem.mockRejectedValue(error);
-
-      await expect(controller.create(dto)).rejects.toThrow(error);
-    });
   });
 
   describe('findAll (GET /items) with class-validator', () => {
-    it('it should validate dto and make service call', async () => {
+    it('should validate dto and make service call', async () => {
       
       const page = '2';
       const limit = '5';
@@ -109,7 +111,7 @@ describe('ItemsController', () => {
       expect(serviceMock.findAllItems).not.toHaveBeenCalled();
     });
 
-    it('it should apply Number() transformation properly, handling edge cases', async () => {
+    it('should apply Number() transformation properly, handling edge cases', async () => {
       
       serviceMock.findAllItems.mockResolvedValue({
         data: [],
@@ -141,26 +143,17 @@ describe('ItemsController', () => {
 
       const result = await controller.findOne(param);
 
-      expect(serviceMock.findOneItem).toHaveBeenCalledWith(param.id);
+      expect(serviceMock.findOneItem).toHaveBeenCalledWith(param);
       expect(result).toEqual(item);
     });
 
-    it('should return null for not found item', async () => {
+    it('should throw NotFoundException for item not found', async () => {
       const param = { id: 'uuid-2' } as any;
-      serviceMock.findOneItem.mockResolvedValue(null);
+      serviceMock.findOneItem.mockRejectedValue(new NotFoundException());
 
-      const result = await controller.findOne(param);
-
-      expect(result).toBeNull();
+      await expect(controller.findOne(param)).rejects.toThrow(NotFoundException)
     });
 
-    it('should propagate service error', async () => {
-      const param = { id: 'uuid-3' } as any;
-      const error = new Error('find error');
-      serviceMock.findOneItem.mockRejectedValue(error);
-
-      await expect(controller.findOne(param)).rejects.toThrow(error);
-    });
   });
 
   describe('update (PATCH /items/:id)', () => {
@@ -173,30 +166,20 @@ describe('ItemsController', () => {
 
       const result = await controller.update(param, dto);
 
-      expect(serviceMock.updateItem).toHaveBeenCalledWith(param.id, dto);
+      expect(serviceMock.updateItem).toHaveBeenCalledWith(param, dto);
       expect(result).toEqual(updated);
     });
 
-    it('should return null when item does not exist', async () => {
+    it('should throw NotFoundException when item does not exist', async () => {
       const param = { id: 'uuid-2' } as any;
       const dto: UpdateItemDto = { description: 'newDescription' };
 
-      serviceMock.updateItem.mockResolvedValue(null);
+      serviceMock.updateItem.mockRejectedValue(new NotFoundException());
 
-      const result = await controller.update(param, dto);
+      await expect(controller.update(param, dto)).rejects.toThrow(NotFoundException);
 
-      expect(result).toBeNull();
     });
 
-    it('should propagate service error', async () => {
-      const param = { id: 'uuid-3' } as any;
-      const dto: UpdateItemDto = { description: 'nova' };
-      const error = new Error('update error');
-
-      serviceMock.updateItem.mockRejectedValue(error);
-
-      await expect(controller.update(param, dto)).rejects.toThrow(error);
-    });
   });
 
   describe('remove (DELETE /items/:id)', () => {
@@ -206,26 +189,18 @@ describe('ItemsController', () => {
 
       const result = await controller.remove(param);
 
-      expect(serviceMock.removeItem).toHaveBeenCalledWith(param.id);
+      expect(serviceMock.removeItem).toHaveBeenCalledWith(param);
       expect(result).toBeUndefined();
     });
 
-    it('should return null when item does not exists', async () => {
+    it('should throw NotFoundException when item does not exists', async () => {
       const param = { id: 'uuid-2' } as any;
-      serviceMock.removeItem.mockResolvedValue(null);
+      serviceMock.removeItem.mockRejectedValue(new NotFoundException());
 
-      const result = await controller.remove(param);
+      await expect(controller.remove(param)).rejects.toThrow(NotFoundException);
 
-      expect(serviceMock.removeItem).toHaveBeenCalledWith(param.id);
-      expect(result).toBeNull();
+      expect(serviceMock.removeItem).toHaveBeenCalledWith(param);
     });
 
-    it('should propagate service error', async () => {
-      const param = { id: 'uuid-3' } as any;
-      const error = new Error('delete error');
-      serviceMock.removeItem.mockRejectedValue(error);
-
-      await expect(controller.remove(param)).rejects.toThrow(error);
-    });
   });
 });

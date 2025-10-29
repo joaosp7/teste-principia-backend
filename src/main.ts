@@ -7,11 +7,20 @@ import { env } from './env/env';
 async function bootstrap() {
   const port = env.PORT ?? 3000
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true,
+    transform: true
+  }));
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Principia Test Backend API')
     .setDescription('Routes especifications')
     .setVersion('1.0')
+    .addApiKey({
+      type: 'apiKey',
+      name: 'Authorization',
+      in: 'header',
+      description: 'Api Key for authorization'
+    }, 'api-key')
     .build();
   const swaggerDocumentFactory = () => SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, swaggerDocumentFactory, {jsonDocumentUrl: 'swagger/json'});

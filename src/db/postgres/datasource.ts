@@ -10,7 +10,8 @@ export const dataSourcePostgresOptions : DataSourceOptions = {
   database: env.POSTGRES_DB,
   synchronize: false,
   entities: ['dist/**/*.entity.js'],
-  migrations: ['dist/db/postgres/migrations/*.js']
+  migrations: ['dist/db/postgres/migrations/*.js'],
+  logging: ['error'],
 }
 
 

@@ -174,7 +174,7 @@ describe('ItemsController (e2e)', () => {
       expect(res.body).toEqual(updated);
     });
 
-    it('deve retornar 200 e null quando item não existe', async () => {
+    it('should return null when items does not exist', async () => {
       serviceMock.updateItem.mockResolvedValue(null);
 
       const res = await request(app.getHttpServer()).patch('/items/uuid-404').send({ description: 'nova' });
@@ -183,7 +183,7 @@ describe('ItemsController (e2e)', () => {
       expect(res.body).toEqual(null);
     });
 
-    it('deve retornar 500 se service falhar', async () => {
+    it('should return 500 if service fails', async () => {
       serviceMock.updateItem.mockRejectedValue(new Error('update error'));
 
       const res = await request(app.getHttpServer()).patch('/items/uuid-err').send({ description: 'nova' });
@@ -193,16 +193,16 @@ describe('ItemsController (e2e)', () => {
   });
 
   describe('DELETE /items/:id', () => {
-    it('deve retornar 200 e undefined quando remove com sucesso', async () => {
+    it('should return 204 in best cenario', async () => {
       serviceMock.removeItem.mockResolvedValue(undefined);
 
       const res = await request(app.getHttpServer()).delete('/items/uuid-1');
 
       expect(serviceMock.removeItem).toHaveBeenCalledWith('uuid-1');
-      expect(res.status).toBe(200);
+      expect(res.status).toBe(204);
     });
 
-    it('deve retornar 200 e null quando item não existe', async () => {
+    it('should return 200 and null when item does not exist', async () => {
       serviceMock.removeItem.mockResolvedValue(null);
 
       const res = await request(app.getHttpServer()).delete('/items/uuid-404');
@@ -211,7 +211,7 @@ describe('ItemsController (e2e)', () => {
       expect(res.body).toEqual(null);
     });
 
-    it('deve retornar 500 se service falhar', async () => {
+    it('should return 500 if service fails', async () => {
       serviceMock.removeItem.mockRejectedValue(new Error('delete error'));
 
       const res = await request(app.getHttpServer()).delete('/items/uuid-err');
