@@ -24,6 +24,8 @@ npm install
 
 Certifique-se de ter um arquivo .env na raiz do projeto contendo todos os campos demonstrados no arquivo .env.exemple 
 
+> **Nota**: Um arquivo `.env.example` está incluído como referência.
+
 Importante: o projeto não ira rodar se os campos obrigatórios da env não estiverem preenchidos corretamente.
 
 ### 3) Iniciar o Banco de Dados com Docker Compose
