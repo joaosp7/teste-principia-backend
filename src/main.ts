@@ -11,6 +11,13 @@ async function bootstrap() {
     whitelist: true,
     transform: true
   }));
+
+  app.enableCors({
+  origin: ['http://localhost:3000', 'http://localhost:5173'], 
+  credentials: true,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+  allowedHeaders: 'Content-Type, Authorization',
+});
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Principia Test Backend API')
     .setDescription('Routes especifications')
