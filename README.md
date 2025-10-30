@@ -68,5 +68,9 @@ Afim de executar os testes construidos para a aplicação, rode em seu terminal:
 ```bash
 npm run test
 ```
+Afim de executar o teste End-to-End (e2e) rode: 
 
+```bash
+npm run test:e2e
+```
 
